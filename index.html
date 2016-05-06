@@ -1,0 +1,210 @@
+<html>
+	<head>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+		<script type="text/javascript" src="https://fb.me/react-with-addons-15.0.1.min.js"></script>
+		<script type="text/javascript" src="https://fb.me/react-dom-15.0.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+		<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			jQuery.extend({
+				getQueryParameters : function(str) {
+					return (str || document.location.search).replace(/(^\?)/,'').split("&").map(function(n){return n = n.split("="),this[n[0]] = n[1],this}.bind({}))[0];
+				}
+			});
+		</script>
+		<style>
+			.navbar {
+				height: 86;
+				margin-bottom: 0px;
+			}
+			
+			.navbar-brand {
+				margin-left: 30px;
+			}
+			
+			.navbar-brand span {
+				margin-left: 20px;
+				font-size: 30px;
+			}
+			
+			.navbar-nav {
+				margin-top: 35px;
+			}
+			
+			.navbar-nav li a {
+				font-size: 24px;
+			}
+			
+			.navbar-right {
+				margin-right: 30px;
+			}
+			
+			.banner {
+				width: 100%;
+			}
+			
+			.banner-container {
+				height: 400;
+				overflow: hidden;
+			}
+			
+			.navbar-default .navbar-nav > .active > a {
+				color: #000;
+				background: #c7c7c7;
+			}
+			
+			.navbar-default .navbar-nav > li > a:hover {
+				color: #000;
+				background: #e7e7e7;
+			}
+			
+			.winner-component {
+				margin: 25px;
+			}
+			
+		</style>
+		<title>Community Guild (In Construction)</title>
+	</head>
+	
+	<body>
+		<header>
+			<div id="nav-bar" />
+		</header>
+		<div id="content" />
+		
+		<script type="text/babel">
+			var NavBar = React.createClass({
+				render: function() {
+					return (
+						<nav className="navbar navbar-default" >
+							<div className="container-fluid">
+								<div className="navbar-header">
+									<a className="navbar-brand" href="?">
+										<img src="http://www.appian.com/assets/logo1.png" />
+										<span>Community Guild</span>
+									</a>
+								</div>
+								<ul className="nav navbar-nav navbar-right" >
+									<li className={$.getQueryParameters().page == null ? "active" : null}><a href="?">Home</a></li>
+									<li className={$.getQueryParameters().page == "spirit" ? "active" : null}><a href="?page=spirit">Spirit Points</a></li>
+									<li className={$.getQueryParameters().page == "winners" ? "active" : null}><a href="?page=winners">Winners</a></li>
+									<li className={$.getQueryParameters().page == "gallery" ? "active" : null}><a href="?page=gallery">Gallery</a></li>
+								</ul>
+							</div>
+						</nav>
+					);
+				}
+			});
+			
+			var Content = React.createClass({
+				render: function() {
+					if ($.getQueryParameters().page == null) {
+						return <HomeContent />;
+					} else if ($.getQueryParameters().page == "spirit") {
+						return <SpiritContent />;
+					} else if ($.getQueryParameters().page == "winners") {
+						return <WinnersContent />;
+					} else if ($.getQueryParameters().page == "gallery") {
+						return <GalleryContent />;
+					}
+					return null;
+				}
+			});
+			
+			var HomeContent = React.createClass({
+				render: function() {
+					return (
+						<div>
+							<Banner imgSrc="http://www.appian.com/assets/engineering-bg.jpg" />
+							<h1>
+								Appian Community Guild (Still In-Construction)
+							</h1>
+						</div>
+					);
+				}
+			});
+			
+			var SpiritContent = React.createClass({
+				render: function() {
+					return (
+						<div>
+							<Banner imgSrc="http://www.appian.com/assets/womens-leadership-council-bg.jpg" />
+							<h1>
+								Spirit Points (Still In-Construction)
+							</h1>
+						</div>
+					);
+				}
+			});
+			
+			var WinnersContent = React.createClass({
+				render: function() {
+					return (
+						<div>
+							<Banner imgSrc="http://www.appian.com/assets/life-at-appian-bg.jpg" />
+							<div className="winner-component">
+								<h2>Trivia Night - April 2016</h2>
+								<div className="row">
+									<Thumbnail size="2" name="Gabriel Hollies" img="https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/2/005/067/11f/1532123.jpg"/>
+									<Thumbnail size="2" name="Justin Kenel" img="https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAMgAAAAJDQ0Nzc5MTY3LTcyZWUtNDRkMi1iOTQ4LTA3ZTc1NzNlYjdhYg.jpg"/>
+								</div>
+							</div>
+						</div>
+					);
+				}
+			});
+			
+			var Thumbnail = React.createClass({
+				render: function() {
+					var size = "col-md-" + this.props.size;
+					return (
+						<div className={size}>
+							<div className="thumbnail">
+								<img src={this.props.img} width="171" height="180" />
+								<div className="caption">
+									<h3 className="text-center">{this.props.name}</h3>
+								</div>
+							</div>
+						</div>
+					);
+				}
+			});
+			
+			var GalleryContent = React.createClass({
+				render: function() {
+					return (
+						<div>
+							<Banner imgSrc="http://www.appian.com/assets/appian-on-campus-bg.jpg" />
+							<h1>
+								Gallery (Still In-Construction)
+							</h1>
+						</div>
+					);
+				}
+			});
+			
+			var Banner = React.createClass({
+				render: function() {
+					return (
+						<div className="banner-container">
+							<img className="banner" src={this.props.imgSrc} />
+						</div>
+					);
+				}
+			});
+
+			ReactDOM.render(
+				<NavBar />,
+				document.getElementById('nav-bar')
+			);
+			
+			ReactDOM.render(
+				<Content />,
+				document.getElementById('content')
+			);
+
+		</script>
+	</body>
+	
+</html>
