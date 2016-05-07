@@ -120,10 +120,52 @@
 							<h1>
 								Appian Community Guild (Still In-Construction)
 							</h1>
+							<NewsContent source="https://api.mlab.com/api/1/databases/communityguild/collections/news?apiKey=bZcxbJu7YHtBr-cjIX2CwLMMpagii_aN" />
 						</div>
 					);
 				}
 			});
+
+			var NewsContent = React.createClass({
+			  getInitialState: function() {
+			    return {
+			    	dateCreated: '',
+			      title: '',
+			      content: ''
+			    };
+			  },
+
+			  componentDidMount: function() {
+			    this.serverRequest = $.get(this.props.source, function (result) {
+			      var news = result[0];
+			      this.setState(
+			      {
+			      	dateCreated: news.dateCreated,
+			        title: news.title,
+			        content: news.content
+			      });
+			    }.bind(this));
+			  },
+
+			  componentWillUnmount: function() {
+			    this.serverRequest.abort();
+			  },
+
+			  render: function() {
+			    return (
+			      <div>
+			        <h3>{this.state.title}</h3>
+			        <div>{this.state.content}</div>
+			        <div>{this.state.dateCreated}</div>
+			      </div>
+			    );
+			  }
+			});
+
+			/*ReactDOM.render(
+			  <NewsContent source="https://api.mlab.com/api/1/databases/communityguild/collections/news?apiKey=bZcxbJu7YHtBr-cjIX2CwLMMpagii_aN" />,
+			  document.getElementById('newsContent')
+			);*/
 			
 			var SpiritContent = React.createClass({
 				render: function() {
