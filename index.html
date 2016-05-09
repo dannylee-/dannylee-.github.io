@@ -5,6 +5,7 @@
 		<script type="text/javascript" src="https://fb.me/react-dom-15.0.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="./communityguild.css">
 		<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 		<script type="text/javascript">
 			jQuery.extend({
@@ -13,57 +14,6 @@
 				}
 			});
 		</script>
-		<style>
-			.navbar {
-				height: 86;
-				margin-bottom: 0px;
-			}
-			
-			.navbar-brand {
-				margin-left: 30px;
-			}
-			
-			.navbar-brand span {
-				margin-left: 20px;
-				font-size: 30px;
-			}
-			
-			.navbar-nav {
-				margin-top: 35px;
-			}
-			
-			.navbar-nav li a {
-				font-size: 24px;
-			}
-			
-			.navbar-right {
-				margin-right: 30px;
-			}
-			
-			.banner {
-				width: 100%;
-			}
-			
-			.banner-container {
-				height: 400;
-				overflow: hidden;
-			}
-			
-			.navbar-default .navbar-nav > .active > a {
-				color: #000;
-				background: #c7c7c7;
-			}
-			
-			.navbar-default .navbar-nav > li > a:hover {
-				color: #000;
-				background: #e7e7e7;
-			}
-			
-			.winner-component {
-				margin: 25px;
-			}
-			
-		</style>
 		<title>Community Guild (In Construction)</title>
 	</head>
 	
@@ -120,7 +70,7 @@
 							<h1>
 								Appian Community Guild (Still In-Construction)
 							</h1>
-							<NewsContent source="https://api.mlab.com/api/1/databases/communityguild/collections/news?apiKey=bZcxbJu7YHtBr-cjIX2CwLMMpagii_aN" />
+							<NewsContent source="https://api.mlab.com/api/1/databases/communityguild/collections/news?apiKey=bZcxbJu7YHtBr-cjIX2CwLMMpagii_aN&s=%7B%22dateCreated%22:-1%7D" />
 						</div>
 					);
 				}
@@ -129,20 +79,25 @@
 			var NewsContent = React.createClass({
 			  getInitialState: function() {
 			    return {
-			    	dateCreated: '',
-			      title: '',
-			      content: ''
+			    	items: []
 			    };
 			  },
 
 			  componentDidMount: function() {
-			    this.serverRequest = $.get(this.props.source, function (result) {
-			      var news = result[0];
+			    this.serverRequest = $.get(this.props.source, function (results) {
+						var items = results.map(
+							function(item) {
+								return {
+									id: item._id["$oid"],
+									title: item.title,
+									content: item.content,
+									dateCreated: (new Date(item.dateCreated * 1000)).toString()
+								};
+							}
+						);
 			      this.setState(
 			      {
-			      	dateCreated: news.dateCreated,
-			        title: news.title,
-			        content: news.content
+			      	items: items
 			      });
 			    }.bind(this));
 			  },
@@ -153,19 +108,31 @@
 
 			  render: function() {
 			    return (
-			      <div>
-			        <h3>{this.state.title}</h3>
-			        <div>{this.state.content}</div>
-			        <div>{this.state.dateCreated}</div>
+			      <div className="news-content">
+							{
+								this.state.items.map(
+									function(item) {
+										console.info(item);
+										return <NewsItem key={item.id} data={item} />;
+									}
+								)
+							}
 			      </div>
 			    );
 			  }
 			});
-
-			/*ReactDOM.render(
-			  <NewsContent source="https://api.mlab.com/api/1/databases/communityguild/collections/news?apiKey=bZcxbJu7YHtBr-cjIX2CwLMMpagii_aN" />,
-			  document.getElementById('newsContent')
-			);*/
+			
+			var NewsItem = React.createClass({
+				render: function() {
+					return (
+						<div className="news-item">
+							<h3>{this.props.data.title}</h3>
+							<div>{this.props.data.content}</div>
+							<div>{this.props.data.dateCreated}</div>
+						</div>
+					);
+				}
+			});
 			
 			var SpiritContent = React.createClass({
 				render: function() {
